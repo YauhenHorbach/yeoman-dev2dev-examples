@@ -1,0 +1,21 @@
+{
+  "name": "generator-second-generator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "files": [
+    "app"
+  ],
+  "scripts": {
+    "test": "yo second-generator"
+  },
+  "keywords": [
+    "yeoman-generator"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "yeoman-generator": "^0.24.1",
+    "yosay": "^1.2.1"
+  }
+}
