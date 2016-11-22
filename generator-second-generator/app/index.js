@@ -98,11 +98,9 @@ module.exports = yeoman.Base.extend({
         this.log('####### Writing task has finished! #######\n');
     },
     install: function () {
-        this.log('####### Install task has started! #######');
-
-        this.npmInstall(['lodash'], { 'save': true });
-
-        this.log('####### Install task has finished! #######\n');
+        const self = this;
+        self.log('####### Install task has started! #######');
+        self.npmInstall(['lodash'], { 'save': true }, () => self.log('####### Install task has finished! #######\n'));
     },
     end: function () {
         this.log('####### End task has started! #######');
