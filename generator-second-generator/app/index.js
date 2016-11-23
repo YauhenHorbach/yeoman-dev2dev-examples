@@ -9,9 +9,8 @@ module.exports = yeoman.Base.extend({
         this.argument('projectName', { type: String, required: false });
         this.projectName = camelCase(this.projectName);
 
-        this.option('serious', { alias: 's', type: Boolean }); // TODO doInstallLodash
-        this.isSerious = this.options.serious;
-        this.log(this.isSerious);
+        this.option('lodash', { alias: 'l', type: Boolean });
+        this.doInstallLodash = this.options.lodash;
     },
     initializing: {
         start: function() {
@@ -29,34 +28,39 @@ module.exports = yeoman.Base.extend({
         const self = this;
         self.log('####### Prompting task has started! #######');
 
-        const questions = [
-            {
+        const questions = [];
+
+        if (!self.projectName) {
+            questions.push({
                 type    : 'input',
                 name    : 'projectName',
                 message : 'Your project name',
                 default : self.projectName || self.appname // Default to current folder name
-            },
-            {
+            });
+        }
+
+        if (!self.doInstallLodash) {
+            questions.push({
                 type    : 'confirm',
                 name    : 'doInstallLodash',
-                message : 'Would you like to install lodash?'
-            }
-        ];
+                message : 'Would you like to install lodash?',
+                store   : true
+            });
+        }
 
         if (!self.username) {
             questions.push({
                 type    : 'input',
                 name    : 'username',
-                message : 'What\'s your Github username?',
-                store   : true
+                message : 'What\'s your Github username?'
             });
         }
 
         return self.prompt(questions)
             .then(function (answers) {
-                self.projectName = answers.projectName;
-                self.doInstallLodash = answers.doInstallLodash;
-                self.username = answers.username;
+                self.projectName = answers.projectName || self.projectName;
+                self.doInstallLodash = answers.doInstallLodash || self.doInstallLodash;
+                self.username = answers.username || self.username;
 
                 self.log('####### Prompting task has finished! #######\n');
             });
@@ -66,7 +70,9 @@ module.exports = yeoman.Base.extend({
 
         self.log('####### Configuring task has started! #######');
 
-        self.config.set('username', self.username);
+        if (self.username) {
+            self.config.set('username', self.username);
+        }
 
         self.log('####### Configuring task has finished! #######\n');
     },
@@ -86,7 +92,7 @@ module.exports = yeoman.Base.extend({
         this.fs.copyTpl(
             this.templatePath('index.html'),
             this.destinationPath(`${this.projectName}/index.html`),
-            { title: `Hey, ${this.username}` }
+            { title: `Hey, ${this.username}!` }
         );
 
         this.log('####### Writing task has finished! #######\n');
