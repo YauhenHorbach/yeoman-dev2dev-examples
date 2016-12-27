@@ -1,30 +1,29 @@
-const yeoman = require('yeoman-generator');
+'use strict';
+
+const YeomanGenerator = require('yeoman-generator');
 const yosay = require('yosay');
 const camelCase = require('lodash/camelCase');
 
-module.exports = yeoman.Base.extend({
-    constructor: function () {
-        yeoman.Base.apply(this, arguments);
+module.exports = class extends YeomanGenerator {
+    constructor(args, opts) {
+        super(args, opts);
 
         this.argument('projectName', { type: String, required: false });
-        this.projectName = camelCase(this.projectName);
+        this.projectName = camelCase(this.options.projectName);
 
         this.option('lodash', { alias: 'l', type: Boolean });
         this.doInstallLodash = this.options.lodash;
-    },
-    initializing: {
-        start: function() {
-            this.log('####### Initializing task has started! #######');
-        },
-        work: function() {
-            this.username = this.config.get('username');
-            this.log(this.username);
-        },
-        end: function() {
-            this.log('####### Initializing task has finished! #######\n');
-        }
-    },
-    prompting: function() {
+    }
+    initializing() {
+        this.log('####### Initializing task has started! #######');
+
+        this.username = this.config.get('username');
+        this.log(this.username);
+
+        this.log('####### Initializing task has finished! #######\n');
+    }
+
+    prompting() {
         const self = this;
         self.log('####### Prompting task has started! #######');
 
@@ -64,8 +63,9 @@ module.exports = yeoman.Base.extend({
 
                 self.log('####### Prompting task has finished! #######\n');
             });
-    },
-    configuring: function () {
+    }
+
+    configuring() {
         const self = this;
 
         self.log('####### Configuring task has started! #######');
@@ -75,18 +75,13 @@ module.exports = yeoman.Base.extend({
         }
 
         self.log('####### Configuring task has finished! #######\n');
-    },
-    default: {
-        start: function () {
-            this.log('####### Default task has started! #######');
+    }
 
-        },
-        finish: function () {
-            this.log('####### Default task has started! #######\n');
+    default() {
+        this.log('####### Default task has started! #######');
+    }
 
-        }
-    },
-    writing: function () {
+    writing() {
         this.log('####### Writing task has started! #######');
         this.log(this.templatePath('index.html'));
         this.fs.copyTpl(
@@ -96,26 +91,30 @@ module.exports = yeoman.Base.extend({
         );
 
         this.log('####### Writing task has finished! #######\n');
-    },
-    install: function () {
+    }
+
+    install() {
         const self = this;
         self.log('####### Install task has started! #######');
         if (self.doInstallLodash) {
-            self.npmInstall(['lodash'], { 'save': true }, () => self.log('####### Install task has finished! #######\n'));
+            self.npmInstall(['lodash'], { 'save': true },
+                () => self.log('####### Install task has finished! #######\n'));
         } else {
             self.log('####### Lodash have not been installed! #######');
             self.log('####### Install task has finished! #######\n');
         }
-    },
-    end: function () {
+    }
+
+    end() {
         this.log('####### End task has started! #######');
 
         this.log(yosay('I see you are about to be fucked up with this generator-shit!'));
 
         this.log('####### End task has finished! #######\n');
-    },
-    someMethod: function () {
+    }
+
+    someMethod() {
         this.log('####### Some task has started! #######');
         this.log('####### Some task has finished! #######\n');
     }
-});
+};

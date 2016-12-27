@@ -1,9 +1,13 @@
-module.exports = require('yeoman-generator').Base.extend({
-    'prompting' : function () {
-        this.log('prompting - zap');
-    },
+'use strict';
 
-    'writing' : function () {
-        this.log('writing - zap');
+const YeomanGenerator = require('yeoman-generator');
+
+module.exports = class extends YeomanGenerator {
+    prompting() {
+        this.log('prompting - turbo');
     }
-});
+
+    writing() {
+        this.log('writing - turbo');
+    }
+};
