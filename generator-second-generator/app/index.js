@@ -14,6 +14,7 @@ module.exports = class extends YeomanGenerator {
         this.option('lodash', { alias: 'l', type: Boolean });
         this.doInstallLodash = this.options.lodash;
     }
+
     initializing() {
         this.log('####### Initializing task has started! #######');
 
@@ -108,7 +109,7 @@ module.exports = class extends YeomanGenerator {
     end() {
         this.log('####### End task has started! #######');
 
-        this.log(yosay('I see you are about to be fucked up with this generator-shit!'));
+        this.log(yosay('See ya later, guys!'));
 
         this.log('####### End task has finished! #######\n');
     }
